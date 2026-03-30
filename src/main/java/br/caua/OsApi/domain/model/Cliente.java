@@ -4,20 +4,34 @@
  */
 package br.caua.OsApi.domain.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
 import java.util.Objects;
 
 /**
  *
  * @author digma
  */
+
+@Entity
 public class Cliente {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String nome;
     private String email;
+    
+    @Column(name = "telefone")
     private String fone;
 
     public Cliente() {
+        //Contrutor Default
     }
+    
 
     public Cliente(long id, String nome, String email, String fone) {
         this.id = id;
@@ -83,4 +97,11 @@ public class Cliente {
         return this.id == other.id;
     }
     
-}
+ 
+    }
+
+        
+    
+   
+    
+
