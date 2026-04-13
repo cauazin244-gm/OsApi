@@ -4,8 +4,10 @@
  */
 package br.caua.OsApi.Controller;
 
+import br.caua.OsApi.Application.domain.service.ClienteService;
 import br.caua.OsApi.domain.model.Cliente;
 import br.caua.OsApi.domain.repository.ClienteRepository;
+import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +32,9 @@ public class ClienteCrontroller {
     
     @Autowired
 private ClienteRepository clienteRepository;
+    
+@Autowired
+private ClienteService clienteService;
 
 @GetMapping("/clientes")
 public List<Cliente> listas() {
@@ -49,12 +54,12 @@ public ResponseEntity<Cliente> buscar(@PathVariable Long clienteID) {
     }
    @PostMapping("/clientes")
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente adicionar(@RequestBody Cliente cliente) {
-    return clienteRepository.save(cliente);
+    public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
+    return clienteService.salvar(cliente);
 }
     
     @PutMapping("/clientes/{clienteID}")
-public ResponseEntity<Cliente> atualizar(@PathVariable Long clienteID,
+public ResponseEntity<Cliente> atualizar(@Valid @PathVariable Long clienteID,
                                          @RequestBody Cliente cliente) {
 
     // Verifica se o cliente existe
@@ -63,7 +68,7 @@ public ResponseEntity<Cliente> atualizar(@PathVariable Long clienteID,
     }
 
     cliente.setId(clienteID);
-    cliente = clienteRepository.save(cliente);
+    cliente = clienteService.salvar(cliente);
     return ResponseEntity.ok(cliente);
 
 }
@@ -75,7 +80,7 @@ public ResponseEntity<Void> excluir(@PathVariable Long clienteID) {
         return ResponseEntity.notFound().build();
     }
 
-    clienteRepository.deleteById(clienteID);
+    clienteService.excluir(clienteID);
     return ResponseEntity.noContent().build();
 
 }
